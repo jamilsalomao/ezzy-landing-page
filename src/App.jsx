@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 // eslint-disable-next-line 
-import { motion, AnimatePresence } from 'framer-motion'; 
+import { motion, AnimatePresence } from 'framer-motion';
+import { SpeedInsights } from '@vercel/speed-insights/react'; 
 import { 
   Menu, X, Download, AlertTriangle, 
   CheckCircle, Users, PieChart, Search, 
@@ -416,6 +417,7 @@ const EzzyLandingPage = () => {
         </motion.a>
       </div>
 
+      <SpeedInsights />
     </div>
   );
 };
