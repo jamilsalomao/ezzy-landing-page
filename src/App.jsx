@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 // eslint-disable-next-line 
 import { motion, AnimatePresence } from 'framer-motion'; 
 import { 
@@ -415,7 +416,7 @@ const EzzyLandingPage = () => {
           <span className="absolute right-full mr-3 bg-[#25D366] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">Suporte WhatsApp</span>
         </motion.a>
       </div>
-
+        <SpeedInsights />
     </div>
   );
 };
