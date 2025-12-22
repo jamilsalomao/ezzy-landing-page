@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 // eslint-disable-next-line 
 import { motion, AnimatePresence } from 'framer-motion'; 
 import { 
@@ -40,16 +41,39 @@ const EzzyLandingPage = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null); 
 
+  const [isSending, setIsSending] = useState(false); // Para mostrar "Enviando..."
+  const form = useRef(); // Referência para o formulário
+
   const scrollToDownload = () => {
     document.getElementById('download-section').scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
-    console.log("Lead Capturado:", data);
-    setFormSubmitted(true);
+    setIsSending(true); // Ativa o loading
+
+    // SEUS DADOS DO EMAILJS
+    const serviceID = 'service_pal3j1d';
+    const templateAdmin = 'template_pjbrkjx'; 
+    const templateClient = 'template_l5dxgqc'; 
+    const publicKey = '_vSwto5VVZIW0kjcd';
+
+    emailjs.sendForm(serviceID, templateAdmin, form.current, publicKey)
+      .then(() => {
+          console.log('Email para Admin enviado!');
+          
+          return emailjs.sendForm(serviceID, templateClient, form.current, publicKey);
+      })
+      .then(() => {
+          console.log('Email para Cliente enviado!');
+          setFormSubmitted(true); 
+          setIsSending(false);
+      })
+      .catch((error) => {
+          console.log('Erro ao enviar:', error);
+          alert("Ocorreu um erro ao enviar. Tente novamente ou chame no WhatsApp.");
+          setIsSending(false);
+      });
   };
 
   const toggleFaq = (index) => {
@@ -288,7 +312,7 @@ const EzzyLandingPage = () => {
           </div>
 
           {!formSubmitted ? (
-            <form onSubmit={handleFormSubmit} className="max-w-lg mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-100 text-left">
+            <form ref={form} onSubmit={handleFormSubmit} className="max-w-lg mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-100 text-left">
               <div className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Seu Nome Completo</label>
@@ -312,11 +336,20 @@ const EzzyLandingPage = () => {
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  type="submit" 
-                  className="w-full bg-orange-600 text-white font-bold py-4 rounded-lg hover:bg-orange-700 transition flex items-center justify-center gap-2 mt-4 shadow-lg shadow-orange-200"
+                  type="submit"
+                  disabled={isSending}
+                  className={`w-full font-bold py-4 rounded-lg transition flex items-center justify-center gap-2 mt-4 shadow-lg shadow-orange-200 ${
+                    isSending ? 'bg-orange-400 cursor-not-allowed' : 'bg-orange-600 hover:bg-orange-700 text-white'
+                  }`}
                 >
-                  <Download size={20} />
-                  Solicitar Acesso Beta
+                  {isSending ? (
+                    "Enviando..."
+                  ) : (
+                    <>
+                      <Download size={20} />
+                      Solicitar Acesso Beta
+                    </>
+                  )}
                 </motion.button>
               </div>
               <p className="text-xs text-center text-gray-400 mt-6">🔒 Seus dados estão seguros e não enviaremos spam.</p>
@@ -370,7 +403,7 @@ const EzzyLandingPage = () => {
         <motion.a 
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          href="https://wa.me/55999999999" 
+          href="https://wa.me/5532998622603" 
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#25D366] text-white p-4 rounded-full shadow-xl hover:bg-[#20bd5a] transition duration-300 flex items-center justify-center group relative"
