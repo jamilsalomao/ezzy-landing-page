@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 // eslint-disable-next-line 
@@ -41,9 +41,29 @@ const EzzyLandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null); 
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const [isSending, setIsSending] = useState(false); // Para mostrar "Enviando..."
-  const form = useRef(); // Referência para o formulário
+  const heroImages = [
+    'ezzy-dashboard.png',
+    'ezzy-lista-clientes.png',
+    'ezzy-cliente-detalhes.png',
+    'ezzy-cadastro.png',
+    'ezzy-equipe.png',
+    'ezzy-ajuda.png',
+    'ezzy-perfil.png',
+    'ezzy-inicial.png'
+  ];
+
+  useEffect(() => {
+    if (heroImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [heroImages.length]); 
+
+  const [isSending, setIsSending] = useState(false);
+  const form = useRef(); 
 
   const scrollToDownload = () => {
     document.getElementById('download-section').scrollIntoView({ behavior: 'smooth' });
@@ -51,9 +71,8 @@ const EzzyLandingPage = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setIsSending(true); // Ativa o loading
+    setIsSending(true);  
 
-    // SEUS DADOS DO EMAILJS
     const serviceID = 'service_pal3j1d';
     const templateAdmin = 'template_pjbrkjx'; 
     const templateClient = 'template_l5dxgqc'; 
@@ -158,9 +177,20 @@ const EzzyLandingPage = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex-1 w-full max-w-sm md:max-w-md mx-auto relative"
+          className="flex-1 w-full max-w-sm md:max-w-md mx-auto relative h-[600px] flex items-center justify-center"
         >
-            <img src="/dashboard-left.png" alt="Dashboard Ezzy" className="w-full h-auto object-contain" />
+          <AnimatePresence mode="wait">
+            <motion.img 
+              key={currentImageIndex}
+              src={heroImages[currentImageIndex]} 
+              alt={`Dashboard Ezzy Tela ${currentImageIndex + 1}`} 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.5 }}
+              className="w-full h-full object-contain absolute inset-0" 
+            />
+          </AnimatePresence>
         </motion.div>
       </section>
       <motion.section 
