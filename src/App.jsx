@@ -44,14 +44,14 @@ const EzzyLandingPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const heroImages = [
+    'ezzy-inicial.png',
     'ezzy-dashboard.png',
     'ezzy-lista-clientes.png',
     'ezzy-cliente-detalhes.png',
     'ezzy-cadastro.png',
     'ezzy-equipe.png',
     'ezzy-ajuda.png',
-    'ezzy-perfil.png',
-    'ezzy-inicial.png'
+    'ezzy-perfil.png'
   ];
 
   useEffect(() => {
