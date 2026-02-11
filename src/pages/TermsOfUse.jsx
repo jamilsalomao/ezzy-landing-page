@@ -125,6 +125,20 @@ const TermsOfUse = () => {
           </section>
         </div>
       </div>
+      <footer className="mt-20 border-t border-gray-200 pt-10 pb-10 text-center text-gray-500 text-sm">
+        <p>© 2025 Ezzy Gestão. Todos os direitos reservados.</p>
+        <div className="flex justify-center gap-6 mt-4 font-medium">
+          <Link to="/" className="hover:text-orange-600 transition">
+            Home
+          </Link>
+          <Link to="/privacidade" className="hover:text-orange-600 transition">
+            Privacidade
+          </Link>
+          <Link to="/ajuda" className="hover:text-orange-600 transition">
+            Central de Ajuda
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 };

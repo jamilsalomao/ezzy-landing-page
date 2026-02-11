@@ -22,6 +22,7 @@ import {
   TrendingUp,
   Star,
   Award,
+  ArrowUp,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -42,19 +43,14 @@ const faqData = [
       "Para garantir que seus dados estejam sempre salvos e sincronizados com sua equipe, o Ezzy precisa de uma conexão com a internet (Wi-Fi ou Dados Móveis).",
   },
   {
-    question: "E se eu tiver dúvidas ou problemas?",
+    question: "Como aviso o cliente sobre o andamento do serviço?",
     answer:
-      "Nós temos um suporte dedicado via e-mail e WhatsApp. Como usuário Beta, você terá contato direto com nosso time de desenvolvimento.",
+      "O Ezzy tem integração direta com o WhatsApp. Em cada etapa (Aprovado, Em Andamento, Concluído), você tem um botão rápido para enviar uma mensagem pré-definida de atualização para o seu cliente.",
   },
   {
     question: "Meus dados estão seguros?",
     answer:
-      "Com certeza. Utilizamos banco de dados em nuvem criptografado, garantindo que suas informações nunca sejam perdidas.",
-  },
-  {
-    question: "Posso adicionar funcionários?",
-    answer:
-      "Sim. O Ezzy foi feito para times. Convide membros e defina o acesso (Dono, Admin ou Funcionário).",
+      "Absolutamente. Utilizamos criptografia de ponta (SSL) e servidores seguros na nuvem para armazenar e proteger as informações da sua empresa e dos seus clientes.",
   },
 ];
 
@@ -63,6 +59,24 @@ const Home = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const heroImages = [
     "ezzy-inicial.png",
@@ -158,6 +172,9 @@ const Home = () => {
             <a href="#faq" className="hover:text-orange-600 transition">
               Dúvidas Frequentes
             </a>
+            <Link to="/ajuda" className="hover:text-orange-600 transition">
+              Suporte
+            </Link>
             <Motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -190,12 +207,26 @@ const Home = () => {
               Funcionalidades
             </a>
             <a
+              href="#funcionalidades"
+              className="block text-gray-600 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Funcionalidades
+            </a>
+            <a
               href="#faq"
               className="block text-gray-600 font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
               Dúvidas Frequentes
             </a>
+            <Link
+              to="/ajuda"
+              className="block text-gray-600 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Suporte
+            </Link>
             <button
               onClick={() => {
                 scrollToDownload();
@@ -708,17 +739,29 @@ const Home = () => {
             <Link to="/privacidade" className="hover:text-white transition">
               Privacidade
             </Link>
-            <a
-              href="mailto:contato.ezzyapp@gmail.com"
-              className="hover:text-white transition"
-            >
+            <Link to="/ajuda" className="hover:text-white transition">
               Suporte
-            </a>
+            </Link>
           </div>
         </div>
       </footer>
 
       <div className="fixed bottom-6 right-6 flex flex-col gap-4 z-50">
+        <button
+          onClick={scrollToTop}
+          className={`bg-orange-500 text-white p-3 rounded-full shadow-lg hover:bg-orange-600 transition-all duration-500 ease-in-out flex items-center justify-center group relative transform ${
+            showBackToTop
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 translate-y-10 pointer-events-none"
+          }`}
+          title="Voltar ao Topo"
+        >
+          <ArrowUp size={24} />
+          <span className="absolute right-full mr-3 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
+            Voltar ao Topo
+          </span>
+        </button>
+
         <Motion.a
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
