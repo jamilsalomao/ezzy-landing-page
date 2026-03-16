@@ -33,9 +33,9 @@ const faqData = [
       "Sim! Durante a fase Beta, o uso do Ezzy é totalmente gratuito para todos os recursos.",
   },
   {
-    question: "Funciona em iPhone (iOS)?",
+    question: "Funciona em Android e iPhone (iOS)?",
     answer:
-      "No momento, o Ezzy está disponível exclusivamente para Android. A versão para iOS está em desenvolvimento.",
+      "Sim! Atualmente o Ezzy está em fase Beta e já está disponível tanto para dispositivos Android quanto para iPhone (iOS).",
   },
   {
     question: "Preciso de internet para usar?",
