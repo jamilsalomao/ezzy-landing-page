@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import HelpCenter from "./pages/HelpCenter";
+import StatusTracking from "./pages/StatusTracking";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/termos" element={<TermsOfUse />} />
         <Route path="/privacidade" element={<PrivacyPolicy />} />
         <Route path="/ajuda" element={<HelpCenter />} />
+        <Route path="/status" element={<StatusTracking />} />
       </Routes>
     </Router>
   );
