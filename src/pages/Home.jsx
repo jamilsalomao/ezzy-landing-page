@@ -276,7 +276,7 @@ const Home = () => {
               href="https://apps.apple.com/us/app/ezzy/id6759135892"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-900 transition shadow-xl"
+              className="flex items-center justify-center gap-3 bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-900 transition shadow-xl w-full sm:w-auto"
               title="Baixar na App Store"
             >
               <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
