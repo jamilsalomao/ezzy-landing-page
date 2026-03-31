@@ -115,10 +115,10 @@ const Home = () => {
     e.preventDefault();
     setIsSending(true);
 
-    const serviceID = "service_pal3j1d";
-    const templateAdmin = "template_pjbrkjx";
-    const templateClient = "template_l5dxgqc";
-    const publicKey = "_vSwto5VVZIW0kjcd";
+    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateAdmin = import.meta.env.VITE_EMAILJS_TEMPLATE_ADMIN_ID;
+    const templateClient = import.meta.env.VITE_EMAILJS_TEMPLATE_CLIENT_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
     emailjs
       .sendForm(serviceID, templateAdmin, form.current, publicKey)
