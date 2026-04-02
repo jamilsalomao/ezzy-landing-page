@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
+import { useDynamicTitle } from "../hooks/useDynamicTitle";
 import {
   Menu,
   X,
@@ -62,6 +63,7 @@ const faqData = [
 ];
 
 const Home = () => {
+  useDynamicTitle("Ezzy App | A plataforma de gestão completa para o seu negócio");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -159,8 +161,6 @@ const Home = () => {
     emailjs
       .sendForm(serviceID, templateAdmin, form.current, publicKey)
       .then(() => {
-        console.log("Email para Admin enviado!");
-
         return emailjs.sendForm(
           serviceID,
           templateClient,
@@ -169,12 +169,10 @@ const Home = () => {
         );
       })
       .then(() => {
-        console.log("Email para Cliente enviado!");
         setFormSubmitted(true);
         setIsSending(false);
       })
-      .catch((error) => {
-        console.log("Erro ao enviar:", error);
+      .catch(() => {
         alert(
           "Ocorreu um erro ao enviar. Tente novamente ou chame no WhatsApp.",
         );
@@ -215,6 +213,9 @@ const Home = () => {
             </a>
             <Link to="/ajuda" className="hover:text-orange-600 transition cursor-pointer">
               Suporte
+            </Link>
+            <Link to="/status" className="hover:text-orange-600 transition cursor-pointer">
+              Rastrear Serviço
             </Link>
             <div className="relative" ref={downloadMenuRef}>
               <Motion.button
@@ -316,6 +317,13 @@ const Home = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Suporte
+            </Link>
+            <Link
+              to="/status"
+              className="block text-gray-600 font-medium cursor-pointer"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Rastrear Serviço
             </Link>
             <div className="space-y-4 pt-4 border-t">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Baixar App</p>
@@ -993,7 +1001,8 @@ const Home = () => {
               <a href="#funcionalidades" className="hover:text-orange-500 transition-colors cursor-pointer">Funcionalidades</a>
               <a href="#download" className="hover:text-orange-500 transition-colors cursor-pointer">Baixar App</a>
               <a href="#faq" className="hover:text-orange-500 transition-colors cursor-pointer">Dúvidas Frequentes</a>
-              <Link to="/ajuda" className="hover:text-orange-500 transition-colors cursor-pointer">Central de Suporte</Link>
+              <Link to="/ajuda" className="hover:text-orange-500 transition-colors cursor-pointer">Central de Ajuda</Link>
+              <Link to="/status" className="hover:text-orange-500 transition-colors cursor-pointer">Rastrear Serviço</Link>
             </div>
           </div>
 
@@ -1013,7 +1022,7 @@ const Home = () => {
               </Motion.a>
               <Motion.a
                 whileHover={{ y: -5, scale: 1.1 }}
-                href="https://wa.me/5532998622603"
+                href="https://wa.me/message/TBPV5F5AJM5WJ1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-12 h-12 bg-gray-900 border border-gray-100/5 rounded-xl flex items-center justify-center hover:text-green-500 hover:border-green-500/50 transition-all cursor-pointer shadow-xl text-gray-300"
@@ -1089,7 +1098,7 @@ const Home = () => {
         <Motion.a
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          href="https://wa.me/5532998622603"
+          href="https://wa.me/message/TBPV5F5AJM5WJ1"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#25D366] text-white p-4 rounded-full shadow-xl hover:bg-[#20bd5a] transition duration-300 flex items-center justify-center group relative cursor-pointer"

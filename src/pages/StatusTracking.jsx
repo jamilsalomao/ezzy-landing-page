@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { motion as Motion } from "framer-motion";
+import { ArrowLeft, Search, AlertTriangle } from "lucide-react";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import SubHeader from "../components/SubHeader";
+import SubFooter from "../components/SubFooter";
+import { useDynamicTitle } from "../hooks/useDynamicTitle";
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -58,24 +64,7 @@ function getStatusConfig(status) {
 
 // ── sub-components ────────────────────────────────────────────────────────────
 
-function Header() {
-  return (
-    <header className="w-full bg-white shadow-sm py-4 px-6 flex justify-center items-center">
-      <span className="text-2xl font-extrabold tracking-tight text-gray-900">
-        ezzy<span className="text-orange-500">.</span>
-      </span>
-    </header>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="w-full py-6 text-center text-sm text-gray-400">
-      Acompanhamento fornecido por{" "}
-      <span className="font-semibold text-gray-500">EzzyApp</span>
-    </footer>
-  );
-}
+// Removidos Header e Footer (agora global)
 
 function Spinner() {
   return (
@@ -88,14 +77,80 @@ function Spinner() {
   );
 }
 
-function ErrorState({ message, icon }) {
+function SearchForm() {
+  const [inputVal, setInputVal] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!inputVal.trim()) return;
+
+    let idExtracted = inputVal.trim();
+    // Tenta extrair o ID caso o usuário tenha colado a URL inteira
+    try {
+      if (idExtracted.includes("http")) {
+        const url = new URL(idExtracted);
+        const params = new URLSearchParams(url.search);
+        if (params.has("id")) {
+          idExtracted = params.get("id");
+        }
+      }
+    } catch {
+      // Ignora erro de parser e usa a string original
+    }
+
+    // Navegação via React Router (sem piscar a tela)
+    navigate(`?id=${encodeURIComponent(idExtracted)}`);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center gap-4 py-20 text-center px-4">
-      <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center text-red-400 text-3xl">
+    <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col gap-3 mx-auto">
+      <input
+        type="text"
+        placeholder="Cole o código ou link de rastreio..."
+        value={inputVal}
+        onChange={(e) => setInputVal(e.target.value)}
+        className="w-full px-4 py-3 rounded-xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition text-sm text-gray-800 placeholder-gray-400 font-medium"
+      />
+      <button
+        type="submit"
+        className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-orange-200 transition cursor-pointer"
+      >
+        Rastrear Serviço
+      </button>
+    </form>
+  );
+}
+
+function SearchState() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 py-16 text-center px-4 w-full">
+      <div className="w-16 h-16 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 mb-2 overflow-hidden shadow-inner">
+        <Motion.div
+          animate={{ x: [-6, 6, -6], rotate: [-15, 15, -15], y: [-2, 2, -2] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+        >
+          <Search size={32} />
+        </Motion.div>
+      </div>
+      <h2 className="text-gray-900 font-bold text-2xl">Rastrear Serviço</h2>
+      <p className="text-gray-500 max-w-sm leading-relaxed mb-6">
+        Digite o código de rastreamento ou cole o link recebido para acompanhar o andamento.
+      </p>
+      <SearchForm />
+    </div>
+  );
+}
+
+function ErrorState({ message, icon, showSearch = false }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 py-16 text-center px-4 w-full">
+      <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-3xl">
         {icon}
       </div>
-      <p className="text-gray-700 font-semibold text-lg">Ops!</p>
-      <p className="text-gray-500 max-w-xs leading-relaxed">{message}</p>
+      <p className="text-gray-900 font-bold text-xl">Ops!</p>
+      <p className="text-gray-500 max-w-xs leading-relaxed mb-4">{message}</p>
+      {showSearch && <SearchForm />}
     </div>
   );
 }
@@ -197,17 +252,20 @@ function ServiceCard({ data }) {
 // ── main page ─────────────────────────────────────────────────────────────────
 
 const StatusTracking = () => {
+  useDynamicTitle("Status do Serviço | Ezzy App");
+
   const [state, setState] = useState("loading"); // loading | notfound | error | success
   const [serviceData, setServiceData] = useState(null);
+  const location = useLocation();
 
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(location.search);
   const serviceId = params.get("id");
 
   useEffect(() => {
     async function fetchService() {
       // ID ausente ou vazio
       if (!serviceId || serviceId.trim() === "") {
-        setState("notfound");
+        setState("idle");
         return;
       }
 
@@ -221,8 +279,7 @@ const StatusTracking = () => {
           setServiceData(docSnap.data());
           setState("success");
         }
-      } catch (err) {
-        console.error("Erro ao buscar serviço:", err);
+      } catch {
         setState("error");
       }
     }
@@ -232,15 +289,26 @@ const StatusTracking = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-900">
-      <Header />
+      <SubHeader />
 
-      <main className="flex-1 flex flex-col items-center justify-start px-4 py-10">
+      <main className="flex-1 flex flex-col items-center justify-start px-4 py-10 w-full max-w-4xl mx-auto">
+        <div className="w-full mb-8">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-orange-600 font-bold hover:underline"
+          >
+            <ArrowLeft size={20} /> Voltar para o Início
+          </Link>
+        </div>
         {state === "loading" && <Spinner />}
+
+        {state === "idle" && <SearchState />}
 
         {state === "notfound" && (
           <ErrorState
-            icon="⚠️"
-            message="Link inválido ou serviço não encontrado. Verifique o link recebido."
+            icon={<AlertTriangle size={32} />}
+            message="Serviço não encontrado. Verifique se o link ou código informado está correto."
+            showSearch={true}
           />
         )}
 
@@ -248,6 +316,7 @@ const StatusTracking = () => {
           <ErrorState
             icon="🌐"
             message="Não foi possível carregar o serviço no momento. Verifique sua conexão e tente novamente."
+            showSearch={true}
           />
         )}
 
@@ -256,7 +325,7 @@ const StatusTracking = () => {
         )}
       </main>
 
-      <Footer />
+      <SubFooter />
     </div>
   );
 };

@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import SubHeader from "../components/SubHeader";
+import SubFooter from "../components/SubFooter";
+import { useDynamicTitle } from "../hooks/useDynamicTitle";
+
+// Componentes globais injetados
 
 const PrivacyPolicy = () => {
+  useDynamicTitle("Política de Privacidade | Ezzy App");
   return (
-    <div className="min-h-screen bg-gray-50 py-20 px-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <SubHeader />
+      <div className="flex-1 py-10 px-6">
       <div className="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-sm border border-gray-100">
         <Link
           to="/"
@@ -25,7 +33,7 @@ const PrivacyPolicy = () => {
               1. Introdução
             </h2>
             <p>
-              Nós do <strong>Ezzy</strong> estamos comprometidos em proteger a
+              Nós do <strong>Ezzy App</strong> estamos comprometidos em proteger a
               sua privacidade. Esta Política de Privacidade explica como
               coletamos, usamos, e protegemos suas informações pessoais ao
               utilizar nosso aplicativo e site.
@@ -132,20 +140,8 @@ const PrivacyPolicy = () => {
           </section>
         </div>
       </div>
-      <footer className="mt-20 border-t border-gray-200 pt-10 pb-10 text-center text-gray-500 text-sm">
-        <p>© 2025 Ezzy Gestão. Todos os direitos reservados.</p>
-        <div className="flex justify-center gap-6 mt-4 font-medium">
-          <Link to="/" className="hover:text-orange-600 transition">
-            Home
-          </Link>
-          <Link to="/termos" className="hover:text-orange-600 transition">
-            Termos de Uso
-          </Link>
-          <Link to="/ajuda" className="hover:text-orange-600 transition">
-            Central de Ajuda
-          </Link>
-        </div>
-      </footer>
+      </div>
+      <SubFooter />
     </div>
   );
 };

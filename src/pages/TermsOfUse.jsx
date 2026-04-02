@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import SubHeader from "../components/SubHeader";
+import SubFooter from "../components/SubFooter";
+import { useDynamicTitle } from "../hooks/useDynamicTitle";
+
+// Componentes compartilhados instalados
 
 const TermsOfUse = () => {
+  useDynamicTitle("Termos de Uso | Ezzy App");
   return (
-    <div className="min-h-screen bg-gray-50 py-20 px-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <SubHeader />
+      <div className="flex-1 py-10 px-6">
       <div className="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-sm border border-gray-100">
         <Link
           to="/"
@@ -23,7 +31,7 @@ const TermsOfUse = () => {
               1. Aceitação dos Termos
             </h2>
             <p>
-              Ao acessar e utilizar o aplicativo <strong>Ezzy</strong>{" "}
+              Ao acessar e utilizar o aplicativo <strong>Ezzy App</strong>{" "}
               ("Serviço"), você concorda em cumprir e ficar vinculado aos
               seguintes termos e condições de uso. Se você não concordar com
               qualquer parte destes termos, não deverá utilizar nosso Serviço.
@@ -35,7 +43,7 @@ const TermsOfUse = () => {
               2. Descrição do Serviço
             </h2>
             <p>
-              O Ezzy é uma plataforma de gestão de clientes e serviços voltada
+              O <strong>Ezzy App</strong> é uma plataforma de gestão de clientes e serviços voltada
               para pequenas empresas e autônomos. O aplicativo permite o
               cadastro de clientes, registro de atendimentos, controle de equipe
               e visualização de métricas básicas.
@@ -91,7 +99,7 @@ const TermsOfUse = () => {
             <p>
               O Serviço é fornecido "como está" e "conforme disponível". Não
               garantimos que o serviço será ininterrupto, seguro ou livre de
-              erros. Em nenhuma circunstância o Ezzy será responsável por danos
+              erros. Em nenhuma circunstância o <strong>Ezzy App</strong> será responsável por danos
               diretos, indiretos, incidentais ou consequentes resultantes do uso
               ou da impossibilidade de uso do serviço.
             </p>
@@ -125,20 +133,8 @@ const TermsOfUse = () => {
           </section>
         </div>
       </div>
-      <footer className="mt-20 border-t border-gray-200 pt-10 pb-10 text-center text-gray-500 text-sm">
-        <p>© 2025 Ezzy Gestão. Todos os direitos reservados.</p>
-        <div className="flex justify-center gap-6 mt-4 font-medium">
-          <Link to="/" className="hover:text-orange-600 transition">
-            Home
-          </Link>
-          <Link to="/privacidade" className="hover:text-orange-600 transition">
-            Privacidade
-          </Link>
-          <Link to="/ajuda" className="hover:text-orange-600 transition">
-            Central de Ajuda
-          </Link>
-        </div>
-      </footer>
+      </div>
+      <SubFooter />
     </div>
   );
 };

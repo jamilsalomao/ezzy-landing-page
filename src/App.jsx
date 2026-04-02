@@ -4,16 +4,20 @@ import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import HelpCenter from "./pages/HelpCenter";
 import StatusTracking from "./pages/StatusTracking";
+import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/termos" element={<TermsOfUse />} />
         <Route path="/privacidade" element={<PrivacyPolicy />} />
         <Route path="/ajuda" element={<HelpCenter />} />
         <Route path="/status" element={<StatusTracking />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
