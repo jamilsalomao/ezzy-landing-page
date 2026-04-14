@@ -9,9 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "overrides": {
-    "rollup": "npm:@rollup/wasm-node@^4.60.1"
-  },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.1.18",
