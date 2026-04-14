@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 100" width="280" height="100">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&amp;display=swap');
+      .logo-text {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 900;
+        font-size: 84px;
+        fill: #111827; /* Dark grayish blue */
+        letter-spacing: -3px;
+      }
+      .logo-dot {
+        fill: #ea580c; /* Tailwind orange-600 */
+      }
+    </style>
+  </defs>
+  
+  <!-- Texto Ezzy -->
+  <text x="10" y="75" class="logo-text">ezzy</text>
+  
+  <!-- Ponto Laranja -->
+  <circle cx="230" cy="75" r="14" class="logo-dot" />
+</svg>

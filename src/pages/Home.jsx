@@ -197,9 +197,9 @@ const Home = () => {
     <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden">
       <nav className="fixed w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
-          <div className="text-3xl font-extrabold tracking-tight text-gray-900 flex items-center gap-1">
-            ezzy<span className="text-orange-500">.</span>
-          </div>
+          <Link to="/" className="flex items-center">
+            <img src="/logo-ezzy.svg" alt="EzzyApp" className="h-8 w-auto" />
+          </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
             <a
@@ -370,7 +370,7 @@ const Home = () => {
         >
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
             Gestão de clientes <br />
-            nunca foi tão <span className="text-orange-600">Ezzy</span>.
+            <span className="whitespace-nowrap">nunca foi tão <img src="/logo-ezzy.svg" alt="Ezzy" className="h-[1em] md:h-[1.1em] w-auto inline-block align-baseline translate-y-1/4 ml-2" /></span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl mx-auto md:mx-0">
             Simplifique seus atendimentos e controle sua equipe com o app que
@@ -544,8 +544,8 @@ const Home = () => {
           <span className="text-orange-600 font-bold tracking-wide uppercase text-sm">
             Funcionalidades
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 text-gray-900">
-            Tudo fica mais Ezzy
+          <h2 className="text-3xl md:text-4xl font-bold mt-2 text-gray-900 text-center">
+            Tudo fica <span className="whitespace-nowrap">mais <img src="/logo-ezzy.svg" alt="Ezzy" className="h-[1em] md:h-[1.1em] w-auto inline-block align-baseline translate-y-1/4 ml-2" /></span>
           </h2>
         </div>
 
@@ -983,11 +983,8 @@ const Home = () => {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           {/* Coluna 1: Branding */}
           <div className="space-y-6">
-            <div className="flex items-center justify-center md:justify-start gap-2">
-              <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-orange-900/20">
-                E
-              </div>
-              <span className="text-2xl font-bold text-white tracking-tight">Ezzy</span>
+            <div className="flex items-center justify-center md:justify-start">
+              <img src="/logo-ezzy-white.svg" alt="Ezzy" className="h-9 w-auto" />
             </div>
             <p className="text-sm leading-relaxed max-w-xs mx-auto md:mx-0 font-medium">
               A solução definitiva para simplificar o seu negócio e o atendimento aos seus clientes.
