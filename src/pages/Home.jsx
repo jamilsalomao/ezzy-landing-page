@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import emailjs from "@emailjs/browser";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { useDynamicTitle } from "../hooks/useDynamicTitle";
@@ -38,7 +37,7 @@ const faqData = [
   {
     question: "Funciona em Android e iPhone (iOS)?",
     answer:
-      "O Ezzy já está disponível na App Store para iPhone (iOS). Para Android (Google Play), o app ainda está na fase Beta — preencha o formulário abaixo para solicitar acesso antecipado!",
+      "Sim! O Ezzy já está disponível tanto na App Store para iPhone (iOS) quanto na Google Play para Android. Baixe agora e comece a usar!",
   },
   {
     question: "Preciso de internet para usar?",
@@ -66,7 +65,6 @@ const Home = () => {
   useDynamicTitle("Ezzy App | A plataforma de gestão completa para o seu negócio");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDownloadMenuOpen, setIsDownloadMenuOpen] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -124,61 +122,6 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [heroImages.length]);
 
-  const [isSending, setIsSending] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const form = useRef();
-
-  const handlePhoneChange = (e) => {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.length > 11) value = value.slice(0, 11);
-
-    if (value.length > 10) {
-      // (11) 91234-5678
-      value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
-    } else if (value.length > 6) {
-      // (11) 1234-5678
-      value = `(${value.slice(0, 2)}) ${value.slice(2, 6)}-${value.slice(6)}`;
-    } else if (value.length > 2) {
-      // (11) 1234
-      value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-    } else if (value.length > 0) {
-      // (11
-      value = `(${value.slice(0, 2)}`;
-    }
-    setPhoneNumber(value);
-  };
-
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setIsSending(true);
-
-    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateAdmin = import.meta.env.VITE_EMAILJS_TEMPLATE_ADMIN_ID;
-    const templateClient = import.meta.env.VITE_EMAILJS_TEMPLATE_CLIENT_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    emailjs
-      .sendForm(serviceID, templateAdmin, form.current, publicKey)
-      .then(() => {
-        return emailjs.sendForm(
-          serviceID,
-          templateClient,
-          form.current,
-          publicKey,
-        );
-      })
-      .then(() => {
-        setFormSubmitted(true);
-        setIsSending(false);
-      })
-      .catch(() => {
-        alert(
-          "Ocorreu um erro ao enviar. Tente novamente ou chame no WhatsApp.",
-        );
-        setIsSending(false);
-      });
-  };
 
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -252,11 +195,11 @@ const Home = () => {
                           <span className="block text-sm font-bold text-gray-800">App Store</span>
                         </div>
                       </a>
-                      <div
-                        onClick={() => {
-                          scrollToDownload();
-                          setIsDownloadMenuOpen(false);
-                        }}
+                      <a
+                        href="https://play.google.com/store/apps/details?id=com.ezzy.app&pcampaignid=web_share"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsDownloadMenuOpen(false)}
                         className="flex items-center gap-3 p-3 hover:bg-orange-50 rounded-lg transition cursor-pointer group"
                       >
                         <div className="w-8 h-8 bg-[#3DDC84] text-white rounded-md flex items-center justify-center shadow-sm">
@@ -266,9 +209,9 @@ const Home = () => {
                         </div>
                         <div className="text-left">
                           <span className="block text-xs text-gray-500">Android</span>
-                          <span className="block text-sm font-bold text-gray-800">Solicitar Beta</span>
+                          <span className="block text-sm font-bold text-gray-800">Google Play</span>
                         </div>
-                      </div>
+                      </a>
                     </div>
                   </Motion.div>
                 )}
@@ -340,13 +283,13 @@ const Home = () => {
                       <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                     </svg>
                   </div>
-                  <span className="text-xs font-bold text-gray-800">iOS (Loja)</span>
+                  <span className="text-xs font-bold text-gray-800">iOS (Loja)</span> 
                 </a>
-                <div
-                  onClick={() => {
-                    scrollToDownload();
-                    setIsMenuOpen(false);
-                  }}
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.ezzy.app&pcampaignid=web_share"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsMenuOpen(false)}
                   className="flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-orange-50 transition cursor-pointer"
                 >
                   <div className="w-10 h-10 bg-[#3DDC84] text-white rounded-lg flex items-center justify-center">
@@ -354,8 +297,8 @@ const Home = () => {
                       <path d="M17.523 15.3414C17.0658 15.3414 16.6946 14.9625 16.6946 14.4952C16.6946 14.0278 17.0658 13.649 17.523 13.649C17.9801 13.649 18.3513 14.0278 18.3513 14.4952C18.3513 14.9625 17.9801 15.3414 17.523 15.3414ZM6.4769 15.3414C6.0197 15.3414 5.6485 14.9625 5.6485 14.4952C5.6485 14.0278 6.0197 13.649 6.4769 13.649C6.9341 13.649 7.3053 14.0278 7.3053 14.4952C7.3053 14.9625 6.9341 15.3414 6.4769 15.3414ZM17.8631 6.19504L19.8665 2.65651C19.9866 2.44301 19.9142 2.17112 19.705 2.04856C19.4959 1.926 19.2292 1.99914 19.1092 1.21264L17.0763 4.80554C15.5391 4.11474 13.8406 3.7229 12 3.7229C10.1594 3.7229 8.4608 4.11474 6.9237 4.80554L4.8908 1.21264C4.7708 1.99914 4.5041 1.926 4.2949 2.04856C4.0858 2.17112 4.0134 2.44301 4.1334 2.65651L6.1368 6.19504C2.716 8.08332 0.3844 11.603 0 15.7482H24C23.6156 11.603 21.284 8.08332 17.8631 6.19504Z"/>
                     </svg>
                   </div>
-                  <span className="text-xs font-bold text-gray-800">Android (Beta)</span>
-                </div>
+                  <span className="text-xs font-bold text-gray-800">Android (Loja)</span>
+                </a>
               </div>
             </div>
           </Motion.div>
@@ -377,19 +320,23 @@ const Home = () => {
             faz jus ao nome: fácil, rápido e eficiente.
           </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start items-center flex-wrap">
-              <Motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={scrollToDownload}
-                className="bg-orange-600 text-white text-lg px-8 py-4 rounded-xl font-bold hover:bg-orange-700 transition shadow-xl shadow-orange-200 flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
-              >
-                <div className="flex items-center gap-2">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                    <path d="M17.523 15.3414C17.0658 15.3414 16.6946 14.9625 16.6946 14.4952C16.6946 14.0278 17.0658 13.649 17.523 13.649C17.9801 13.649 18.3513 14.0278 18.3513 14.4952C18.3513 14.9625 17.9801 15.3414 17.523 15.3414ZM6.4769 15.3414C6.0197 15.3414 5.6485 14.9625 5.6485 14.4952C5.6485 14.0278 6.0197 13.649 6.4769 13.649C6.9341 13.649 7.3053 14.0278 7.3053 14.4952C7.3053 14.9625 6.9341 15.3414 6.4769 15.3414ZM17.8631 6.19504L19.8665 2.65651C19.9866 2.44301 19.9142 2.17112 19.705 2.04856C19.4959 1.926 19.2292 1.99914 19.1092 1.21264L17.0763 4.80554C15.5391 4.11474 13.8406 3.7229 12 3.7229C10.1594 3.7229 8.4608 4.11474 6.9237 4.80554L4.8908 1.21264C4.7708 1.99914 4.5041 1.926 4.2949 2.04856C4.0858 2.17112 4.0134 2.44301 4.1334 2.65651L6.1368 6.19504C2.716 8.08332 0.3844 11.603 0 15.7482H24C23.6156 11.603 21.284 8.08332 17.8631 6.19504Z"/>
-                  </svg>
-                  <span>Solicitar Beta Android</span>
-                </div>
-              </Motion.button>
+            <Motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="https://play.google.com/store/apps/details?id=com.ezzy.app&pcampaignid=web_share"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 bg-[#3DDC84] text-white px-5 py-3 rounded-xl hover:bg-[#34c776] transition shadow-xl w-full sm:w-auto cursor-pointer"
+              title="Baixar no Google Play"
+            >
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M17.523 15.3414C17.0658 15.3414 16.6946 14.9625 16.6946 14.4952C16.6946 14.0278 17.0658 13.649 17.523 13.649C17.9801 13.649 18.3513 14.0278 18.3513 14.4952C18.3513 14.9625 17.9801 15.3414 17.523 15.3414ZM6.4769 15.3414C6.0197 15.3414 5.6485 14.9625 5.6485 14.4952C5.6485 14.0278 6.0197 13.649 6.4769 13.649C6.9341 13.649 7.3053 14.0278 7.3053 14.4952C7.3053 14.9625 6.9341 15.3414 6.4769 15.3414ZM17.8631 6.19504L19.8665 2.65651C19.9866 2.44301 19.9142 2.17112 19.705 2.04856C19.4959 1.926 19.2292 1.99914 19.1092 1.21264L17.0763 4.80554C15.5391 4.11474 13.8406 3.7229 12 3.7229C10.1594 3.7229 8.4608 4.11474 6.9237 4.80554L4.8908 1.21264C4.7708 1.99914 4.5041 1.926 4.2949 2.04856C4.0858 2.17112 4.0134 2.44301 4.1334 2.65651L6.1368 6.19504C2.716 8.08332 0.3844 11.603 0 15.7482H24C23.6156 11.603 21.284 8.08332 17.8631 6.19504Z"/>
+              </svg>
+              <div className="text-left leading-tight">
+                <span className="block text-[10px] text-green-100 font-normal">Disponível no</span>
+                <span className="block text-base font-semibold tracking-tight">Google Play</span>
+              </div>
+            </Motion.a>
 
             {/* App Store badge */}
             <Motion.a
@@ -833,146 +780,65 @@ const Home = () => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center gap-6 relative overflow-hidden group h-full"
+              className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center relative overflow-hidden group h-full"
             >
-              <div className="absolute top-0 right-0 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
-                Fase Beta
+              <div className="absolute top-0 right-0 bg-[#3DDC84] text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                Disponível
               </div>
-              <div className="w-16 h-16 bg-[#3DDC84] text-white rounded-2xl flex items-center justify-center shadow-lg transform group-hover:-rotate-6 transition">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
-                  <path d="M17.523 15.3414C17.0658 15.3414 16.6946 14.9625 16.6946 14.4952C16.6946 14.0278 17.0658 13.649 17.523 13.649C17.9801 13.649 18.3513 14.0278 18.3513 14.4952C18.3513 14.9625 17.9801 15.3414 17.523 15.3414ZM6.4769 15.3414C6.0197 15.3414 5.6485 14.9625 5.6485 14.4952C5.6485 14.0278 6.0197 13.649 6.4769 13.649C6.9341 13.649 7.3053 14.0278 7.3053 14.4952C7.3053 14.9625 6.9341 15.3414 6.4769 15.3414ZM17.8631 6.19504L19.8665 2.65651C19.9866 2.44301 19.9142 2.17112 19.705 2.04856C19.4959 1.926 19.2292 1.99914 19.1092 1.21264L17.0763 4.80554C15.5391 4.11474 13.8406 3.7229 12 3.7229C10.1594 3.7229 8.4608 4.11474 6.9237 4.80554L4.8908 1.21264C4.7708 1.99914 4.5041 1.926 4.2949 2.04856C4.0858 2.17112 4.0134 2.44301 4.1334 2.65651L6.1368 6.19504C2.716 8.08332 0.3844 11.603 0 15.7482H24C23.6156 11.603 21.284 8.08332 17.8631 6.19504Z"/>
-                </svg>
-              </div>
-              <div className="text-center">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Usuários Android</h3>
-                <p className="text-sm text-gray-500">Cadastre-se abaixo para receber o link.</p>
-              </div>
-              <div className="w-full">
-                {!formSubmitted ? (
-                  <form
-                    ref={form}
-                    onSubmit={handleFormSubmit}
-                    className="w-full text-left space-y-5"
-                  >
-                    <div className="space-y-4">
-                      <div>
-                        <label htmlFor="android-name" className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
-                          Seu Nome Completo <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          id="android-name"
-                          type="text"
-                          name="name"
-                          placeholder="Ex: Jamil Salomão"
-                          required
-                          className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="android-company" className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer" title="Opcional">
-                          Nome da Empresa <span className="text-gray-400 font-normal text-xs">(opcional)</span>
-                        </label>
-                        <input
-                          id="android-company"
-                          type="text"
-                          name="company"
-                          placeholder="Ex: Tech Soluções"
-                          className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition"
-                        />
-                      </div>
+              
+              <div className="flex flex-col items-center grow w-full">
+                <div className="w-16 h-16 bg-[#3DDC84] text-white rounded-2xl flex items-center justify-center shadow-lg transform group-hover:-rotate-6 transition mb-6">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                    <path d="M17.523 15.3414C17.0658 15.3414 16.6946 14.9625 16.6946 14.4952C16.6946 14.0278 17.0658 13.649 17.523 13.649C17.9801 13.649 18.3513 14.0278 18.3513 14.4952C18.3513 14.9625 17.9801 15.3414 17.523 15.3414ZM6.4769 15.3414C6.0197 15.3414 5.6485 14.9625 5.6485 14.4952C5.6485 14.0278 6.0197 13.649 6.4769 13.649C6.9341 13.649 7.3053 14.0278 7.3053 14.4952C7.3053 14.9625 6.9341 15.3414 6.4769 15.3414ZM17.8631 6.19504L19.8665 2.65651C19.9866 2.44301 19.9142 2.17112 19.705 2.04856C19.4959 1.926 19.2292 1.99914 19.1092 1.21264L17.0763 4.80554C15.5391 4.11474 13.8406 3.7229 12 3.7229C10.1594 3.7229 8.4608 4.11474 6.9237 4.80554L4.8908 1.21264C4.7708 1.99914 4.5041 1.926 4.2949 2.04856C4.0858 2.17112 4.0134 2.44301 4.1334 2.65651L6.1368 6.19504C2.716 8.08332 0.3844 11.603 0 15.7482H24C23.6156 11.603 21.284 8.08332 17.8631 6.19504Z"/>
+                  </svg>
+                </div>
+                <div className="text-center mb-10">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Usuários Android</h3>
+                  <p className="text-sm text-gray-500">Já estamos na Google Play.</p>
+                </div>
+                
+                <div className="flex flex-col items-center grow w-full">
+                  <div className="w-full mt-1">
+                    <ul className="text-left space-y-2 mb-14 mx-auto inline-block">
+                      <li className="flex items-center gap-2 text-xs text-gray-600">
+                        <CheckCircle size={14} className="text-[#3DDC84] shrink-0" />
+                        <span className="font-medium">Gestão Rápida & Prática</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-xs text-gray-600">
+                        <CheckCircle size={14} className="text-[#3DDC84] shrink-0" />
+                        <span className="font-medium">Sincronização em Nuvem</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-xs text-gray-600">
+                        <CheckCircle size={14} className="text-[#3DDC84] shrink-0" />
+                        <span className="font-medium">Interface Simples & Intuitiva</span>
+                      </li>
+                      <li className="flex items-center gap-2 text-xs text-gray-600">
+                        <CheckCircle size={14} className="text-[#3DDC84] shrink-0" />
+                        <span className="font-medium">Fácil de Usar no Android</span>
+                      </li>
+                    </ul>
 
-                      <div className="space-y-4">
-                        <div>
-                          <label htmlFor="android-phone" className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
-                            WhatsApp <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            id="android-phone"
-                            type="tel"
-                            name="phone"
-                            placeholder="(00) 90000-0000"
-                            required
-                            value={phoneNumber}
-                            onChange={handlePhoneChange}
-                            className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="android-email" className="block text-sm font-medium text-gray-700 mb-1 cursor-pointer">
-                            E-mail <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            id="android-email"
-                            type="email"
-                            name="email"
-                            placeholder="seu@email.com"
-                            required
-                            className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition"
-                          />
-                        </div>
-                      </div>
+                    <div className="hidden md:flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-2xl border border-gray-100 mx-auto w-fit mb-0">
+                      <img src="/ezzy-android-qrcode.png" alt="QR Code Android" className="w-24 h-24" />
+                      <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Escaneie para baixar</span>
+                    </div>
+                  </div>
 
-                      <div className="w-full mt-auto pt-4 space-y-4">
-                        <Motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          type="submit"
-                          disabled={isSending}
-                          className={`w-full font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-orange-200 cursor-pointer ${
-                            isSending
-                              ? "bg-orange-400 cursor-not-allowed"
-                              : "bg-orange-600 hover:bg-orange-700 text-white"
-                          }`}
-                        >
-                          {isSending ? (
-                            "Enviando..."
-                          ) : (
-                            <>
-                              <Download size={20} />
-                              Solicitar Acesso Beta
-                            </>
-                          )}
-                        </Motion.button>
-                        <p className="text-[10px] text-center text-gray-400 h-4 flex items-center justify-center gap-1">
-                          🔒 Seus dados estão seguros e não enviaremos spam.
-                        </p>
-                      </div>
-                    </div>
-                  </form>
-                ) : (
-                  <Motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="bg-green-50 p-6 rounded-2xl border border-green-100 w-full"
-                  >
-                    <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <CheckCircle size={24} />
-                    </div>
-                    <h3 className="text-lg font-bold text-green-800 mb-1">Solicitação Recebida!</h3>
-                    <p className="text-sm text-green-700 mb-6 px-2">
-                       Nossa equipe enviará o link do Ezzy para o seu WhatsApp/Email em breve.
+                  <div className="w-full mt-auto pt-4 space-y-4">
+                    <a
+                      href="https://play.google.com/store/apps/details?id=com.ezzy.app&pcampaignid=web_share"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-4 px-6 bg-[#3DDC84] text-white rounded-xl font-bold hover:bg-[#34c776] transition flex items-center justify-center gap-2 shadow-lg"
+                    >
+                      Baixar no Google Play
+                    </a>
+                    
+                    <p className="text-[10px] text-center text-gray-400 h-4 flex items-center justify-center gap-1 uppercase tracking-tighter">
+                      <span className="text-[#3DDC84] text-sm">★★★★★</span> Google Play Brasil
                     </p>
-
-                    <div className="space-y-3">
-                      <a
-                        href={`https://wa.me/?text=${encodeURIComponent("Opa, estou testando o novo app Ezzy para gestão e achei que você ia gostar! Dá uma olhada aqui: https://www.ezzyapp.com.br/")}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold hover:bg-[#22c35e] transition shadow-lg shadow-green-100 cursor-pointer"
-                      >
-                        <MessageCircle size={18} />
-                        Convidar um Amigo
-                      </a>
-
-                      <button
-                        onClick={() => setFormSubmitted(false)}
-                        className="block w-full text-xs text-green-700 font-semibold hover:text-green-900 underline cursor-pointer py-2"
-                      >
-                        Cadastrar outra pessoa
-                      </button>
-                    </div>
-                  </Motion.div>
-                )}
+                  </div>
+                </div>
               </div>
             </Motion.div>
           </div>
